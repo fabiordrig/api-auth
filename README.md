@@ -1,1 +1,1 @@
-api-auth
+api_auth
