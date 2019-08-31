@@ -16,8 +16,8 @@ const ERROR_MESSAGE_FAILED_AUTH = 'Falha na autenticação'
 
 function autenticar (req, res) {
   
-  let idCliente = req.body.idCliente
-  //let firebaseId = req.body.firebaseId
+  let email = req.body.email
+  let senha = req.body.senha
   
   
   return services.autenticacao.autenticar(idCliente)
@@ -34,8 +34,8 @@ function renovarToken (req, res) {
     
     if (err) return res.status(403).send({ erro: true, mensagem: ERROR_MESSAGE_FAILED_AUTH })
     
-    let idCliente = decoded.idCliente
-    //let firebaseId = null
+    let email = req.body.email
+    let senha = req.body.senha
     
     if(decoded.podeRenovar !== true) return res.status(403).send({ erro: true, mensagem: ERROR_MESSAGE_FAILED_AUTH })
     
