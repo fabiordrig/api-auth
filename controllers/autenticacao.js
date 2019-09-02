@@ -35,8 +35,8 @@ function renovarToken (req, res) {
     
     if (err) return res.status(403).send({ erro: true, mensagem: ERROR_MESSAGE_FAILED_AUTH })
     
-    let idCliente = decoded.idCliente
-    //let firebaseId = null
+    let email = req.body.email
+    let senha = req.body.senha
     
     if(decoded.podeRenovar !== true) return res.status(403).send({ erro: true, mensagem: ERROR_MESSAGE_FAILED_AUTH })
     
