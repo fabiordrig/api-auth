@@ -24,7 +24,6 @@ const autenticar = async (dados) => {
   }
 
   JSON.stringify(crypt)
-  console.log(crypt)
   return autenticacaoJwt(crypt)
 
 }
