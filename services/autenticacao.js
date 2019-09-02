@@ -7,43 +7,49 @@ const TOKEN_EXPIRE_TIME = 86400
 
 
 const INVALID_CREDENDTIALS = 'Credencial Inválida'
+const saltRounds = 10;
 
-
-const autenticar = async (idCliente) => {
+const autenticar = async (dados) => {
   
-  let cliente = await servicesCliente.buscarClientePorId(idCliente)
-
-  if (!cliente){
+  
+  let crypt = {}
+  if (!dados){
     return Promise.resolve({erro: true, status: 403, message: INVALID_CREDENDTIALS, codigo: 'CREDENCIAL_INVALIDA'})
   }
-  //const clienteValido = renovarToken || bcrypt.compareSync(firebaseId, usuario.usuario.firebaseId)
   
-  JSON.stringify(cliente)
   
-  return autenticacaoJwt(cliente)
+  crypt =  {
+    email: bcrypt.hashSync(dados.email, saltRounds),
+    senha: bcrypt.hashSync(dados.senha, saltRounds)
+  }
+
+  JSON.stringify(crypt)
+  console.log(crypt)
+  return autenticacaoJwt(crypt)
 
 }
 
 
-const autenticacaoJwt = (cliente) => {
+const autenticacaoJwt = (dados) => {
 
   let sessao = {
-    id_cliente: cliente.get('id_cliente'),
-    nome_cliente: cliente.get('nome_cliente')
+    email: dados.email,
+    senha: dados.senha
   }
 
   let dadosRefresh = {
-    nome_cliente: cliente.get('nome_cliente'),
+    email: dados.email,
+    senha: dados.senha,
     podeRenovar: true
   }
   let refreshToken = jwt.sign(dadosRefresh, config.secret, {
     expiresIn: TOKEN_EXPIRE_TIME,
-    subject: cliente.get('nome_cliente')
+    subject: dados.email
   })
 
   let token = jwt.sign(sessao, config.secret, {
     expiresIn: TOKEN_EXPIRE_TIME,
-    subject: cliente.get('nome_cliente')
+    subject: dados.email
   })
 
   return { dados: sessao, token: token, auth: true, refreshToken: refreshToken }

@@ -16,14 +16,15 @@ const ERROR_MESSAGE_FAILED_AUTH = 'Falha na autenticação'
 
 function autenticar (req, res) {
   
-  let idCliente = req.body.idCliente
-  //let firebaseId = req.body.firebaseId
-  
-  
-  return services.autenticacao.autenticar(idCliente)
-    .then( autenticacao => {
-      if(autenticacao.erro) return res.status(autenticacao.status).send(autenticacao)
+  let dados = {
+    email: req.body.email,
+    senha: req.body.senha
+  } 
       
+  return services.autenticacao.autenticar(dados)
+    .then( autenticacao => {
+      if (autenticacao.erro) return res.status(autenticacao.status).send(autenticacao)
+    
       return res.status(200).send(autenticacao)
     })
 }
@@ -42,7 +43,7 @@ function renovarToken (req, res) {
     return services.autenticacao.autenticar(idCliente)
       .then( autenticacao => {
         if(autenticacao.erro) return res.status(autenticacao.status).send(autenticacao)
-        return res.status(200).send(autenticacao)
+        return res.sendStatus(200).send(autenticacao)
       })
   })
   
