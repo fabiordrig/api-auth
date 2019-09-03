@@ -15,13 +15,27 @@ const ERROR_MESSAGE_FAILED_AUTH = 'Falha na autenticação'
 
 
 function autenticar (req, res) {
+  let dados = {
+    id: req.body.id,
+    email: req.body.email,
+    senha_hash: req.body.senha_hash
+  } 
+      
+  return services.autenticacao.autenticar(dados)
+    .then( autenticacao => {
+      if (autenticacao.erro) return res.status(autenticacao.status).send(autenticacao)
+    
+      return res.status(200).send(autenticacao)
+    })
+}
+function cadastrarUsuario (req, res) {
   
   let dados = {
     email: req.body.email,
     senha: req.body.senha
   } 
       
-  return services.autenticacao.autenticar(dados)
+  return services.autenticacao.cadastrarUsuario(dados)
     .then( autenticacao => {
       if (autenticacao.erro) return res.status(autenticacao.status).send(autenticacao)
     
@@ -43,7 +57,7 @@ function renovarToken (req, res) {
     return services.autenticacao.autenticar(idCliente)
       .then( autenticacao => {
         if(autenticacao.erro) return res.status(autenticacao.status).send(autenticacao)
-        return res.sendStatus(200).send(autenticacao)
+        return res.sendStatus(200)
       })
   })
   
@@ -51,5 +65,6 @@ function renovarToken (req, res) {
 
 module.exports = {
   autenticar,
-  renovarToken
+  renovarToken,
+  cadastrarUsuario
 }

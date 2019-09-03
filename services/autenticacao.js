@@ -13,33 +13,49 @@ const saltRounds = 10;
 const autenticar = async (dados) => {
   
   
-  let crypt = {}
   if (!dados){
     return Promise.resolve({erro: true, status: 403, message: INVALID_CREDENDTIALS, codigo: 'CREDENCIAL_INVALIDA'})
   }
+
   
-  
-  crypt =  {
-    email: bcrypt.hashSync(dados.email, saltRounds),
-    senha: bcrypt.hashSync(dados.senha, saltRounds)
+  let op = {
+    where: dados.id
   }
 
-  JSON.stringify(crypt)
-  return autenticacaoJwt(crypt)
+  return db.cliente.findOne(op).then( cliente => {
+    if (!cliente){
+      return Promise.resolve({erro: true, status: 403, message: INVALID_CREDENDTIALS, codigo: 'CREDENCIAL_INVALIDA'})
+    }
+
+    let hash = bcrypt.hashSync(cliente.senha_hash, saltRounds)
+    console.log('>>>>>>>>',hash)
+    let senha = bcrypt.compareSync(cliente.senha_hash, hash);
+    console.log('>>>>>>>>',senha)
+
+    if (!senha) {
+      return Promise.resolve({erro: true, status: 403, message: INVALID_CREDENDTIALS, codigo: 'CREDENCIAL_INVALIDA'})
+    }
+    
+    let token = {
+      idCliente: cliente.id,
+      email: cliente.email
+    }
+
+    JSON.stringify(token)
+    return autenticacaoJwt(token)
+  })
 
 }
-
 
 const autenticacaoJwt = (dados) => {
 
   let sessao = {
-    email: dados.email,
-    senha: dados.senha
+    idCliente: dados.id,
+    email: dados.email
   }
 
   let dadosRefresh = {
     email: dados.email,
-    senha: dados.senha,
     podeRenovar: true
   }
   let refreshToken = jwt.sign(dadosRefresh, config.secret, {
@@ -56,7 +72,23 @@ const autenticacaoJwt = (dados) => {
 
 }
 
+const cadastrarUsuario = (dados) => {
+  
+  if (!dados){
+    return Promise.resolve({erro: true, status: 403, message: INVALID_CREDENDTIALS, codigo: 'CREDENCIAL_INVALIDA'})
+  }
+
+  let cliente = {
+    email: dados.email,
+    senha_hash: bcrypt.hashSync(dados.senha, saltRounds)
+  }
+
+  return db.cliente.create(cliente)
+
+}
+
 module.exports = {
   autenticacaoJwt,
-  autenticar
+  autenticar,
+  cadastrarUsuario
 }
