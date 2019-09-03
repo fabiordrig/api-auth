@@ -1,0 +1,40 @@
+{
+  "development": {
+    "username": "developer",
+    "password": "developer",
+    "database": "auth",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "define": {
+      "underscored": true,
+      "timestamps": true,
+      "createdAt": "dt_criacao",
+      "updatedAt": "dt_alteracao"
+    },
+    "timezone" : "-03:00",
+    "pool": {
+      "max": 3,
+      "min": 0,
+      "idle": 1000,
+      "acquire": 1000
+    },
+    "retry": {
+      "max": 3
+    }
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+    
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}

@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const config = require('../auth/config')
+const db = require('../db/models')
 
 // 86400 === 24H
 const TOKEN_EXPIRE_TIME = 86400
