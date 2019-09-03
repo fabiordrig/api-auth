@@ -28,9 +28,8 @@ const autenticar = async (dados) => {
     }
 
     let hash = bcrypt.hashSync(cliente.senha_hash, saltRounds)
-    console.log('>>>>>>>>',hash)
+    
     let senha = bcrypt.compareSync(cliente.senha_hash, hash);
-    console.log('>>>>>>>>',senha)
 
     if (!senha) {
       return Promise.resolve({erro: true, status: 403, message: INVALID_CREDENDTIALS, codigo: 'CREDENCIAL_INVALIDA'})
