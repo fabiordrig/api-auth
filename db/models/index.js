@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
-const crypto = require('crypto');
+//const crypto = require('crypto');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
@@ -14,22 +14,22 @@ const sequelize_fixtures = require('sequelize-fixtures');
 
 let algorithm = 'aes-256-ctr'
 
-function decryptUser(text){
-  let decipher = crypto.createDecipher(algorithm,config.username)
-  let dec = decipher.update(text,'hex','utf8')
-  dec += decipher.final('utf8');
-  return dec;
-}
+//function decryptUser(text){
+ // let decipher = crypto.createDecipher(algorithm,config.username)
+ // let dec = decipher.update(text,'hex','utf8')
+  //dec += decipher.final('utf8');
+  //return dec;
+//}
 
-function decryptPass(text){
-  let decipher = crypto.createDecipher(algorithm,config.password)
-  let dec = decipher.update(text,'hex','utf8')
-  dec += decipher.final('utf8');
-  return dec;
-}
+//function decryptPass(text){
+ // let decipher = crypto.createDecipher(algorithm,config.password)
+  //let dec = decipher.update(text,'hex','utf8')
+  //dec += decipher.final('utf8');
+  //return dec;
+//}
 
-let user = decryptUser(config.username)
-let passw = decryptPass(config.password)
+//let user = decryptUser(config.username)
+//let passw = decryptPass(config.password)
 
 let sequelize;
 if (config.use_env_variable) {
