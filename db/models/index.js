@@ -22,7 +22,7 @@ function decryptUser(text){
 }
 
 function decryptPass(text){
-  let decipher = crypto.createDecipher(algorithm,config.username)
+  let decipher = crypto.createDecipher(algorithm,config.password)
   let dec = decipher.update(text,'hex','utf8')
   dec += decipher.final('utf8');
   return dec;
@@ -35,7 +35,7 @@ let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
-  sequelize = new Sequelize(config.database, user, passw, config);
+  sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
 
