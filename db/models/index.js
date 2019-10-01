@@ -62,6 +62,8 @@ const SINCRONIZAR = false
 const FORCE_DB = false
 const FORCE_INSERT_DB = false
 
+sequelize.sync({force:true})
+
 // this create table if not exists
 if( SINCRONIZAR ) {
   sequelize.sync({force: FORCE_DB}).then( () => {
