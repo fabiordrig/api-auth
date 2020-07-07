@@ -1,7 +1,7 @@
 {
   "development": {
-    "username": "developer",
-    "password": "developer",
+    "username": "dev",
+    "password": "fatec123",
     "database": "auth",
     "host": "127.0.0.1",
     "dialect": "mysql",
@@ -11,7 +11,7 @@
       "createdAt": "dt_criacao",
       "updatedAt": "dt_alteracao"
     },
-    "timezone" : "-03:00",
+    "timezone": "-03:00",
     "pool": {
       "max": 3,
       "min": 0,
@@ -28,13 +28,12 @@
     "database": "database_test",
     "host": "127.0.0.1",
     "dialect": "mysql"
-    
   },
   "production": {
-    "username": "IgOfEiPZR1",
-    "password": "LyibD8Ie5z",
-    "database": "IgOfEiPZR1",
-    "host": "remotemysql.com",
+    "username": "apiauth",
+    "password": "fabinho@123",
+    "database": "authfatec",
+    "host": "www.db4free.net",
     "dialect": "mysql",
     "define": {
       "underscored": true,
@@ -42,7 +41,7 @@
       "createdAt": "dt_criacao",
       "updatedAt": "dt_alteracao"
     },
-    "timezone" : "-03:00",
+    "timezone": "-03:00",
     "pool": {
       "max": 3,
       "min": 0,
