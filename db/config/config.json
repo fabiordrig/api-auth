@@ -1,10 +1,11 @@
 {
   "development": {
-    "username": "dev",
-    "password": "fatec123",
+    "username": "root",
+    "password": "password",
     "database": "auth",
     "host": "127.0.0.1",
     "dialect": "mysql",
+
     "define": {
       "underscored": true,
       "timestamps": true,

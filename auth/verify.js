@@ -3,6 +3,7 @@ const config = require("./config");
 
 const ERROR_MESSAGE_NO_TOKEN_PROVIDED = "Token não encontrado";
 const ERROR_MESSAGE_FAILED_AUTH = "Falha na autenticação";
+const ERROR_MESSAGE_PERMISSION = "PERMISSION_DENIED";
 
 function verifyAdminToken(req, res, next) {
   const token = req.headers["x-access-token"];
@@ -13,9 +14,7 @@ function verifyAdminToken(req, res, next) {
 
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err)
-      return res
-        .status(403)
-        .send({ auth: false, message: ERROR_MESSAGE_FAILED_AUTH });
+      return res.status(403).send({ auth: false, message: ERROR_MESSAGE_FAILED_AUTH });
 
     if (!decoded.usuario) return res.status(400).send();
 
@@ -38,10 +37,10 @@ function verifyToken(req, res, next) {
 
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err)
-      return res
-        .status(403)
-        .send({ auth: false, message: ERROR_MESSAGE_FAILED_AUTH });
+      return res.status(403).send({ auth: false, message: ERROR_MESSAGE_FAILED_AUTH });
 
+    if (!decoded.isAdmin)
+      return res.status(403).send({ auth: false, message: ERROR_MESSAGE_PERMISSION });
     req.userId = decoded.id;
     req.dataSession = decoded;
     next();

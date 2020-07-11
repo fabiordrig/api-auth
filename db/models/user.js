@@ -2,10 +2,10 @@
 
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
-    "cliente",
+    "user",
     {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         primaryKey: true,
         allowNull: false,
         autoIncrement: true,
@@ -18,6 +18,11 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      idClient: {
+        field: "fk_id_cliente",
+        type: DataTypes.BIGINT,
+        allowNull: false,
+      },
       isAdmin: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -25,7 +30,7 @@ module.exports = function (sequelize, DataTypes) {
       },
     },
     {
-      tableName: "cliente",
+      tableName: "user",
       timestamps: true,
     }
   );

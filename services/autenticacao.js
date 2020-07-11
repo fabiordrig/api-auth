@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("../auth/config");
-const db = require("../db/models");
+const { db } = require("../db/models");
 
 // 86400 === 24H
 const TOKEN_EXPIRE_TIME = 86400;
@@ -24,20 +24,20 @@ const autenticar = async (dados) => {
       email: dados.email,
     },
   };
-
-  return db.cliente.findOne(op).then((cliente) => {
-    if (!cliente) {
+  console.log(dados, op);
+  return db.user.findOne(op).then((user) => {
+    if (!user) {
       return Promise.resolve({
         erro: true,
-        status: 403,
-        message: INVALID_CREDENDTIALS,
-        codigo: "CREDENCIAL_INVALIDA",
+        status: 404,
+        message: "NOT_FOUND",
+        codigo: "NOT_FOUND",
       });
     }
 
-    let hash = bcrypt.hashSync(cliente.senha, saltRounds);
+    let hash = bcrypt.hashSync(user.senha, saltRounds);
 
-    let senha = bcrypt.compareSync(cliente.senha, hash);
+    let senha = bcrypt.compareSync(user.senha, hash);
 
     if (!senha) {
       return Promise.resolve({
@@ -49,9 +49,10 @@ const autenticar = async (dados) => {
     }
 
     let token = {
-      idCliente: cliente.id,
-      email: cliente.email,
-      isAdmin: cliente.isAdmin,
+      idUser: user.id,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      idClient: user.idClient,
     };
 
     JSON.stringify(token);
@@ -59,11 +60,31 @@ const autenticar = async (dados) => {
   });
 };
 
+const getAllUsers = async (dados) => {
+  if (!dados) {
+    return Promise.resolve({
+      erro: true,
+      status: 404,
+      message: "NOT_FOUND",
+      codigo: "NOT_FOUND",
+    });
+  }
+
+  if (!dados.onlyAdmin) {
+    op.where.isAdmin = dados.onlyAdmin;
+  }
+
+  return db.user.findAll({
+    where: { idClient: dados.idClient, isAdmin: dados.onlyAdmin },
+  });
+};
+
 const autenticacaoJwt = (dados) => {
   let sessao = {
-    idCliente: dados.id,
+    idUser: dados.id,
     email: dados.email,
     isAdmin: dados.isAdmin,
+    idClient: dados.idClient,
   };
 
   let dadosRefresh = {
@@ -98,17 +119,19 @@ const cadastrarUsuario = (dados, isAdmin) => {
     });
   }
 
-  let cliente = {
+  let newUser = {
     email: dados.email,
     senha: bcrypt.hashSync(dados.senha, saltRounds),
+    idClient: dados.idClient,
     isAdmin,
   };
 
-  return db.cliente.create(cliente);
+  return db.user.create(newUser);
 };
 
 module.exports = {
   autenticacaoJwt,
   autenticar,
+  getAllUsers,
   cadastrarUsuario,
 };

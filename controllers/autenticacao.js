@@ -28,17 +28,32 @@ function cadastrarUsuario(req, res) {
   let dados = {
     email: req.body.email,
     senha: req.body.senha,
+    idClient: req.body.idClient,
   };
 
-  const isAdmin = false;
-  if (req.query.isAdmin === true) {
+  let isAdmin;
+  if (req.query.isAdmin) {
     isAdmin = true;
+  } else {
+    isAdmin = false;
   }
 
   return services.autenticacao.cadastrarUsuario(dados, isAdmin).then((autenticacao) => {
     if (autenticacao.erro) return res.status(autenticacao.status).send(autenticacao);
 
     return res.status(200).send(autenticacao);
+  });
+}
+
+function userByClient(req, res) {
+  let dados = {
+    onlyAdmin: req.query.onlyAdmin,
+    idClient: req.params.idClient,
+  };
+
+  return services.autenticacao.getAllUsers(dados).then((users) => {
+    if (users.erro) return res.status(users.status).send(users);
+    return res.status(200).send(users);
   });
 }
 
@@ -64,5 +79,6 @@ function renovarToken(req, res) {
 module.exports = {
   autenticar,
   renovarToken,
+  userByClient,
   cadastrarUsuario,
 };

@@ -36,6 +36,14 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
+/// associations
+db.clients.hasMany(db.user, { foreignKey: "fk_id_cliente", as: "usuarioCliente" });
+
+db.user.belongsTo(db.clients, {
+  foreignKey: "fk_id_cliente",
+  as: "clienteUsuarios",
+});
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
@@ -61,4 +69,4 @@ if (SINCRONIZAR) {
   });
 }
 
-module.exports = db;
+module.exports = { db, sequelize };
